@@ -1,0 +1,47 @@
+import React, { useState } from "react";
+import { View, Text, TextInput, Button, FlatList } from "react-native";
+
+const App = () => {
+  const [billAmount, setBillAmount] = useState("");
+  const [savings, setSavings] = useState(null);
+  const [suggestions, setSuggestions] = useState([]);
+
+  const calculateSavings = () => {
+    const amount = parseFloat(billAmount);
+    if (!isNaN(amount)) {
+      const potentialSavings = amount * 0.4;
+      setSavings(potentialSavings);
+      setSuggestions([
+        "Reduza o consumo em horários de pico",
+        "Utilize lâmpadas LED",
+        "Desligue aparelhos da tomada quando não estiverem em uso",
+      ]);
+    }
+  };
+
+  return (
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 20, fontWeight: "bold" }}>Economize Energia</Text>
+      <TextInput
+        placeholder="Digite o valor da conta"
+        keyboardType="numeric"
+        value={billAmount}
+        onChangeText={setBillAmount}
+        style={{ borderWidth: 1, padding: 10, marginVertical: 10 }}
+      />
+      <Button title="Calcular Economia" onPress={calculateSavings} />
+      {savings !== null && (
+        <Text style={{ marginTop: 10, fontSize: 18 }}>
+          Economia potencial: R$ {savings.toFixed(2)}
+        </Text>
+      )}
+      <FlatList
+        data={suggestions}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => <Text>- {item}</Text>}
+      />
+    </View>
+  );
+};
+
+export default App;
